@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Jobs\SendEmailToSubscribers;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 
@@ -71,6 +72,8 @@ class PostController extends Controller
                 'website_id' => $request->website_id ?? $post->website_id,
             ]);
             DB::commit();
+
+            SendEmailToSubscribers::dispatch();
 
             return $post;
         } catch (\Exception $e) {
